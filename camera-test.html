@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Camera Test — LensWord diagnostic</title>
+<style>
+  body{ margin:0; background:#0A0F14; color:#F4F7FA; font-family: -apple-system, sans-serif; padding: 24px; }
+  h1{ font-size: 20px; }
+  video{ width:100%; max-width:480px; border-radius:16px; background:#000; display:block; margin: 16px 0; }
+  #log{ background:#121A24; border:1px solid #2a3644; border-radius:12px; padding:16px; font-family: monospace; font-size:13px; white-space:pre-wrap; line-height:1.6; }
+  .ok{ color:#4FD8E8; }
+  .err{ color:#FF6B6B; }
+  .warn{ color:#FFB454; }
+  button{ background:#FFB454; border:none; color:#241505; font-weight:700; padding:12px 20px; border-radius:10px; font-size:14px; margin-bottom:12px; }
+</style>
+</head>
+<body>
+  <h1>📷 Camera-only test (no AI models, no CDN dependency)</h1>
+  <p>This page tests <b>only</b> whether your browser + OS will give this page a live camera feed. If this works but the main LensWord app doesn't, the problem is the TensorFlow.js CDN scripts (ad-blocker/firewall) — not your camera. If this page ALSO fails or stays black, it's a camera/OS permission problem, unrelated to the app's code.</p>
+  <button id="start">Start camera test</button>
+  <video id="video" autoplay playsinline muted></video>
+  <div id="log">Click "Start camera test" to begin…</div>
+
+  <script>
+    const logEl = document.getElementById("log");
+    const video = document.getElementById("video");
+    function log(msg, cls) {
+      const line = document.createElement("div");
+      if (cls) line.className = cls;
+      line.textContent = msg;
+      logEl.appendChild(line);
+    }
+
+    document.getElementById("start").addEventListener("click", async () => {
+      logEl.innerHTML = "";
+      log("Checking secure context… " + (window.isSecureContext ? "OK (secure)" : "NOT SECURE — camera will be blocked"), window.isSecureContext ? "ok" : "err");
+      log("Checking navigator.mediaDevices… " + (navigator.mediaDevices ? "available" : "MISSING — very old browser or non-secure context"), navigator.mediaDevices ? "ok" : "err");
+
+      if (!navigator.mediaDevices) return;
+
+      try {
+        log("Requesting camera access (this should trigger a browser permission prompt if you haven't allowed it yet)…", "warn");
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+        log("getUserMedia resolved successfully.", "ok");
+        video.srcObject = stream;
+        await new Promise(res => video.onloadedmetadata = res);
+        await video.play();
+        log(`Video metadata loaded: ${video.videoWidth}x${video.videoHeight}`, video.videoWidth > 0 ? "ok" : "err");
+        if (video.videoWidth === 0) {
+          log("videoWidth is 0 — the stream exists but has no real frames. This is the classic sign of an OS-level camera block (see below).", "err");
+        } else {
+          log("SUCCESS — if you can see a live picture above, your camera works fine in this browser.", "ok");
+        }
+      } catch (err) {
+        log("getUserMedia FAILED: " + err.name + " — " + err.message, "err");
+        if (err.name === "NotAllowedError") {
+          log("This means camera access was denied — either you clicked Block, or a previous denial is cached. Click the camera icon in the address bar to reset it.", "warn");
+        } else if (err.name === "NotFoundError") {
+          log("No camera device was found at all.", "warn");
+        } else if (err.name === "NotReadableError") {
+          log("A camera exists but couldn't be started — often means another app (Zoom, FaceTime, another browser tab) is currently using it. Close other apps using the camera and retry.", "warn");
+        }
+      }
+    });
+  </script>
+</body>
+</html>
