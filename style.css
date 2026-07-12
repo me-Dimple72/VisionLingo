@@ -207,6 +207,14 @@ button{ font-family: inherit; cursor:pointer; }
 }
 @keyframes pinDrop{ from{ opacity:0; transform: translate(-50%,-80%) scale(0.7);} to{ opacity:1; transform: translate(-50%,-100%) scale(1);} }
 
+.unlock-audio-banner{
+  position:absolute; bottom:14px; left:14px; right:14px; z-index:12;
+  background: rgba(255,180,84,0.95); color:#241505;
+  font-weight:600; font-size:13px; text-align:center;
+  padding: 10px 14px; border-radius: 12px;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
 .auto-pill-layer{ position:absolute; inset:0; z-index:9; pointer-events:none; display:flex; justify-content:center; }
 .auto-pill{
   position:absolute; top:16px;

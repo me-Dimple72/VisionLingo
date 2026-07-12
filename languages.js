@@ -2,6 +2,7 @@
 // `translate` = code used by the MyMemory translation API (en|xx)
 // `speech`    = BCP-47 locale used by the browser SpeechSynthesis API
 const LANGUAGES = [
+  { code: "en", name: "English",    flag: "🇺🇸", translate: "en", speech: "en-US" },
   { code: "es", name: "Spanish",    flag: "🇪🇸", translate: "es", speech: "es-ES" },
   { code: "fr", name: "French",     flag: "🇫🇷", translate: "fr", speech: "fr-FR" },
   { code: "de", name: "German",     flag: "🇩🇪", translate: "de", speech: "de-DE" },

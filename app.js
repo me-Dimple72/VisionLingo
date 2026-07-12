@@ -12,6 +12,20 @@
      - localStorage    -> saved words AND pinned on-screen labels
 ========================================================================== */
 
+// Fail loudly and visibly if languages.js didn't load, instead of letting
+// every line below silently break with no clue why. This is almost always
+// caused by languages.js missing from the folder, a typo'd filename, or a
+// server 404 — check your terminal/server log for a 404 on languages.js.
+if (typeof LANGUAGES === "undefined") {
+  document.body.innerHTML = `
+    <div style="padding:36px 24px;color:#F4F7FA;font-family:-apple-system,sans-serif;background:#0A0F14;min-height:100vh;box-sizing:border-box;">
+      <h1 style="color:#FF6B6B;font-size:20px;">⚠️ languages.js didn't load</h1>
+      <p style="line-height:1.6;max-width:520px;">This app needs <code>languages.js</code> sitting in the <b>same folder</b> as <code>index.html</code>, <code>style.css</code>, and <code>app.js</code> — not a subfolder.</p>
+      <p style="line-height:1.6;max-width:520px;">Check your terminal/server log: if you see something like <code>GET /languages.js 404</code>, that confirms the file is missing or misplaced. Add it next to the other files and reload.</p>
+    </div>`;
+  throw new Error("LANGUAGES is undefined — languages.js is missing or failed to load (check for a 404 in your server log).");
+}
+
 // ---------------------------------------------------------------------------
 // State
 // ---------------------------------------------------------------------------
@@ -52,6 +66,7 @@ const els = {
   cameraError: document.getElementById("cameraError"),
   cameraErrorMsg: document.getElementById("cameraErrorMsg"),
   retryCamera: document.getElementById("retryCamera"),
+  unlockAudioBanner: document.getElementById("unlockAudioBanner"),
   camFlip: document.getElementById("camFlip"),
   labelSettingsBtn: document.getElementById("labelSettingsBtn"),
   anchorsLayer: document.getElementById("anchorsLayer"),
@@ -241,6 +256,8 @@ async function startCamera() {
       }
     }, 2500);
 
+    if (!speechUnlocked) els.unlockAudioBanner.classList.remove("hidden");
+
     if (!state.cocoModel || !state.clsModel) loadModels();
     else requestAnimationFrame(detectLoop);
   } catch (err) {
@@ -285,6 +302,21 @@ async function loadModels() {
       throw new Error("CDN_BLOCKED");
     }
 
+    // Explicitly pick and confirm a TF.js backend before loading models.
+    // Leaving this implicit has caused silent, permanent failures on some
+    // mobile GPUs/browsers where WebGL initialization has issues — every
+    // subsequent detect() call then throws forever with zero visible sign
+    // of why boxes never appear. Falling back to the CPU backend is slower
+    // but at least works everywhere.
+    try {
+      await tf.setBackend("webgl");
+      await tf.ready();
+    } catch (backendErr) {
+      console.warn("WebGL backend failed, falling back to CPU:", backendErr);
+      await tf.setBackend("cpu");
+      await tf.ready();
+    }
+
     const withTimeout = (promise, ms, label) => Promise.race([
       promise,
       new Promise((_, reject) => setTimeout(() => reject(new Error("TIMEOUT:" + label)), ms)),
@@ -322,7 +354,23 @@ async function detectLoop(ts) {
         const preds = await state.cocoModel.detect(els.video, 8);
         mapDetections(preds);
         drawDetections();
-      } catch (e) { /* transient — skip this frame */ }
+        state.detectFailCount = 0; // reset once a detect call succeeds
+      } catch (e) {
+        state.detectFailCount = (state.detectFailCount || 0) + 1;
+        // A single failed frame is normal and safe to ignore. But if it
+        // fails over and over, something is permanently broken (bad WebGL
+        // context, etc) — say so on screen instead of scanning forever
+        // with zero boxes and no explanation, which is impossible to debug.
+        if (state.detectFailCount === 1 || state.detectFailCount % 25 === 0) {
+          console.error(`Detection has failed ${state.detectFailCount} time(s) in a row:`, e);
+        }
+        if (state.detectFailCount === 15) {
+          els.scanStatusText.textContent = "Detection errors — see below";
+          els.cameraErrorMsg.innerHTML =
+            `The detector is repeatedly failing to analyze frames (usually a GPU/WebGL issue on this specific device or browser). Open DevTools Console for the exact error, or try: reloading the page, switching browsers (Chrome tends to be most reliable), or restarting your device.`;
+          els.cameraError.classList.remove("hidden");
+        }
+      }
       state.detecting = false;
     }
   }
@@ -403,13 +451,32 @@ async function runAutoAnnounce() {
 
   state.autoBusy = true;
   try {
-    // classify a generous center crop — works regardless of whether
-    // coco-ssd drew a box, so nothing is limited to its 80 classes
-    const size = Math.min(vw, vh) * 0.65;
-    const sx = (vw - size) / 2, sy = (vh - size) / 2;
+    // Prefer the largest object coco-ssd is currently tracking — classifying
+    // its actual box is far more accurate than blindly guessing at the
+    // center of frame, which was misidentifying off-center objects (e.g.
+    // reporting something totally unrelated to a bottle held to one side).
+    // Only fall back to a center crop when nothing is currently detected,
+    // so off-catalog objects (outside coco's 80 classes) still get picked up.
+    let sx, sy, ssize;
+    const biggestBox = state.detections.length
+      ? state.detections.reduce((a, b) => (a.videoBox.w * a.videoBox.h > b.videoBox.w * b.videoBox.h ? a : b)).videoBox
+      : null;
+
+    if (biggestBox) {
+      const padX = biggestBox.w * 0.15, padY = biggestBox.h * 0.15;
+      sx = Math.max(0, biggestBox.x - padX);
+      sy = Math.max(0, biggestBox.y - padY);
+      ssize = Math.max(biggestBox.w + padX * 2, biggestBox.h + padY * 2);
+      ssize = Math.min(ssize, vw - sx, vh - sy);
+    } else {
+      ssize = Math.min(vw, vh) * 0.65;
+      sx = (vw - ssize) / 2;
+      sy = (vh - ssize) / 2;
+    }
+
     cropCanvas.width = 224; cropCanvas.height = 224;
     const cctx = cropCanvas.getContext("2d");
-    cctx.drawImage(els.video, sx, sy, size, size, 0, 0, 224, 224);
+    cctx.drawImage(els.video, sx, sy, ssize, ssize, 0, 0, 224, 224);
 
     const results = await state.clsModel.classify(cropCanvas, 1);
     const top = results[0];
@@ -641,12 +708,52 @@ function showCatchToast(message) {
   }, 2000);
 }
 
-function speak(text, langCode) {
-  if (!("speechSynthesis" in window)) return;
+// ---------------------------------------------------------------------------
+// Speech unlock — many browsers (especially iOS Safari) block ANY audio,
+// including speechSynthesis, until it has been triggered by a direct user
+// gesture at least once on the page. Auto-speak fires from a timer (not a
+// tap), so without this unlock it fails completely silently — this is the
+// #1 cause of "auto-speak doesn't say anything." We unlock on the very
+// first tap/click anywhere in the app.
+// ---------------------------------------------------------------------------
+let speechUnlocked = false;
+function unlockSpeechOnce() {
+  if (speechUnlocked || !("speechSynthesis" in window)) return;
+  speechUnlocked = true;
+  els.unlockAudioBanner.classList.add("hidden");
+  try {
+    const unlockUtt = new SpeechSynthesisUtterance(" ");
+    unlockUtt.volume = 0;
+    window.speechSynthesis.speak(unlockUtt);
+  } catch (e) { /* ignore */ }
+}
+document.addEventListener("click", unlockSpeechOnce, { once: true });
+document.addEventListener("touchstart", unlockSpeechOnce, { once: true });
+
+// Some browsers load voice lists asynchronously — speaking before they're
+// ready can silently produce no audio for non-default languages.
+let voicesReady = false;
+function ensureVoicesLoaded() {
+  return new Promise((resolve) => {
+    if (!("speechSynthesis" in window)) return resolve();
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) { voicesReady = true; return resolve(); }
+    window.speechSynthesis.onvoiceschanged = () => { voicesReady = true; resolve(); };
+    setTimeout(resolve, 1200); // don't hang forever if the event never fires
+  });
+}
+
+async function speak(text, langCode) {
+  if (!("speechSynthesis" in window)) {
+    console.warn("This browser doesn't support speechSynthesis.");
+    return;
+  }
+  if (!voicesReady) await ensureVoicesLoaded();
   window.speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang = langCode;
   utt.rate = 0.9;
+  utt.onerror = (e) => console.error("Speech synthesis error:", e.error, "— was audio unlocked by a tap yet?", speechUnlocked);
   window.speechSynthesis.speak(utt);
 }
 
@@ -686,6 +793,10 @@ function renderAnchors() {
 // Translation (MyMemory free API, cached in localStorage)
 // ---------------------------------------------------------------------------
 async function translateWord(word, langCode) {
+  // English is the source language classification labels already come in —
+  // no need to round-trip through a translation API for it.
+  if (langCode === "en") return capitalizeWord(word);
+
   const lang = LANGUAGES.find(l => l.code === langCode);
   const cacheKey = `${word}_${langCode}`;
   if (state.translationCache[cacheKey]) return state.translationCache[cacheKey];
@@ -702,6 +813,7 @@ async function translateWord(word, langCode) {
     return word;
   }
 }
+function capitalizeWord(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
 
 // ---------------------------------------------------------------------------
 // Tray (flashcards) — with search, language filter, sort
