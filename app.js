@@ -1,5 +1,5 @@
 /* ==========================================================================
-   LensWord — point your camera at anything, learn the word for it.
+   VisionLingo — point your camera at anything, learn the word for it.
    Modeled after the real "Lingo lens" iOS app (ARKit + Vision/CoreML +
    Apple Translation), rebuilt for the free open web:
      - COCO-SSD (TensorFlow.js)  -> live bounding boxes
@@ -30,11 +30,11 @@ if (typeof LANGUAGES === "undefined") {
 // State
 // ---------------------------------------------------------------------------
 const state = {
-  lang: localStorage.getItem("lensword_lang") || "es",
-  sensitivity: parseFloat(localStorage.getItem("lensword_sensitivity") || "0.5"),
-  words: JSON.parse(localStorage.getItem("lensword_words") || "[]"),
-  translationCache: JSON.parse(localStorage.getItem("lensword_cache") || "{}"),
-  labelScale: parseFloat(localStorage.getItem("lensword_label_scale") || "1"),
+  lang: localStorage.getItem("visionlingo_lang") || "es",
+  sensitivity: parseFloat(localStorage.getItem("visionlingo_sensitivity") || "0.6"),
+  words: JSON.parse(localStorage.getItem("visionlingo_words") || "[]"),
+  translationCache: JSON.parse(localStorage.getItem("visionlingo_cache") || "{}"),
+  labelScale: parseFloat(localStorage.getItem("visionlingo_label_scale") || "1"),
   cocoModel: null,
   clsModel: null,
   facingMode: "environment",
@@ -49,7 +49,7 @@ const state = {
   trayFilterLang: null,  // null = all languages
   traySortBy: "date",    // date | en | translated
   traySortOrder: "desc", // asc | desc
-  autoSpeak: localStorage.getItem("lensword_autospeak") !== "off", // on by default
+  autoSpeak: localStorage.getItem("visionlingo_autospeak") !== "off", // on by default
   autoBusy: false,
   lastAnnouncedLabel: null,
 };
@@ -116,12 +116,12 @@ function currentLanguage() {
   return LANGUAGES.find(l => l.code === state.lang) || LANGUAGES[0];
 }
 function persist() {
-  localStorage.setItem("lensword_lang", state.lang);
-  localStorage.setItem("lensword_sensitivity", String(state.sensitivity));
-  localStorage.setItem("lensword_words", JSON.stringify(state.words));
-  localStorage.setItem("lensword_cache", JSON.stringify(state.translationCache));
-  localStorage.setItem("lensword_label_scale", String(state.labelScale));
-  localStorage.setItem("lensword_autospeak", state.autoSpeak ? "on" : "off");
+  localStorage.setItem("visionlingo_lang", state.lang);
+  localStorage.setItem("visionlingo_sensitivity", String(state.sensitivity));
+  localStorage.setItem("visionlingo_words", JSON.stringify(state.words));
+  localStorage.setItem("visionlingo_cache", JSON.stringify(state.translationCache));
+  localStorage.setItem("visionlingo_label_scale", String(state.labelScale));
+  localStorage.setItem("visionlingo_autospeak", state.autoSpeak ? "on" : "off");
 }
 
 // ---------------------------------------------------------------------------
@@ -146,12 +146,12 @@ function initOnboarding() {
   });
   render();
 
-  if (!localStorage.getItem("lensword_onboarded")) {
+  if (!localStorage.getItem("visionlingo_onboarded")) {
     els.onboard.classList.remove("hidden");
   }
 }
 function finishOnboarding() {
-  localStorage.setItem("lensword_onboarded", "1");
+  localStorage.setItem("visionlingo_onboarded", "1");
   els.onboard.classList.add("hidden");
 }
 
@@ -351,7 +351,7 @@ async function detectLoop(ts) {
       state.lastDetectAt = ts;
       state.detecting = true;
       try {
-        const preds = await state.cocoModel.detect(els.video, 8);
+        const preds = await state.cocoModel.detect(els.video, 5);
         mapDetections(preds);
         drawDetections();
         state.detectFailCount = 0; // reset once a detect call succeeds
@@ -387,7 +387,7 @@ function mapDetections(preds) {
   const offsetX = (videoW * scale - displayW) / 2;
   const offsetY = (videoH * scale - displayH) / 2;
 
-  state.detections = preds
+  let mapped = preds
     .filter(p => p.score >= state.sensitivity)
     .map(p => {
       const [x, y, w, h] = p.bbox;
@@ -397,6 +397,32 @@ function mapDetections(preds) {
         videoBox: { x, y, w, h },
       };
     });
+
+  // Cross-class suppression: coco-ssd's built-in NMS only dedupes within the
+  // same class, so the same physical object can still get two overlapping
+  // boxes under two different class names (e.g. "bottle" AND "vase" both
+  // firing on one item) — exactly the "2-3-4 random boxes" symptom. Keep
+  // only the highest-scoring box in any cluster of heavily overlapping boxes.
+  mapped.sort((a, b) => b.score - a.score);
+  const kept = [];
+  for (const box of mapped) {
+    const overlapsKept = kept.some(k => iou(box, k) > 0.35);
+    if (!overlapsKept) kept.push(box);
+  }
+
+  // Cap to the top few most confident boxes — a live viewfinder showing one
+  // or two clean boxes on the actual object reads as "detection," a screen
+  // full of low-confidence boxes reads as noise.
+  state.detections = kept.slice(0, 3);
+}
+
+function iou(a, b) {
+  const x1 = Math.max(a.x, b.x), y1 = Math.max(a.y, b.y);
+  const x2 = Math.min(a.x + a.w, b.x + b.w), y2 = Math.min(a.y + a.h, b.y + b.h);
+  const interW = Math.max(0, x2 - x1), interH = Math.max(0, y2 - y1);
+  const interArea = interW * interH;
+  const unionArea = a.w * a.h + b.w * b.h - interArea;
+  return unionArea > 0 ? interArea / unionArea : 0;
 }
 
 function drawDetections() {
@@ -411,9 +437,12 @@ function drawDetections() {
     roundRectPath(ctx, d.x, d.y, d.w, d.h, 12);
     ctx.stroke();
 
+    // Show the actual detected name immediately, like the reference app —
+    // tapping is only needed for translation/pronunciation/saving, not to
+    // find out what the box thinks it's looking at.
     const chip = document.createElement("div");
     chip.className = "box-label";
-    chip.textContent = "tap to identify";
+    chip.textContent = capitalizeWord(d.coarseLabel);
     chip.style.left = Math.max(4, d.x) + "px";
     chip.style.top = Math.max(4, d.y - 22) + "px";
     if (isSelected) chip.style.background = "#FFB454";

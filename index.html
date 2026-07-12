@@ -2,289 +2,221 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>LensWord — Point. Learn. Say it.</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔎</text></svg>" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VisionLingo — See it. Say it. Learn it.</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👁️</text></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#15131F; --mist:#6C6B80; --line:#EBE9F5;
+  --paper:#FFFFFF; --paper-tint:#F7F6FD;
+  --brand:#5B4FE8; --brand-dark:#4038B8; --brand-tint:#EFEDFE;
+  --green:#22C55E; --blue:#3B82F6; --rose:#F43F5E;
+  --font-display:'Sora',sans-serif; --font-body:'Inter',sans-serif;
+  --radius-lg:22px; --radius-md:14px;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+/* ---------- NAV ---------- */
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;max-width:1180px;margin:0 auto;}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:800;font-size:19px;}
+.logo-mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#8B7FF5);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.nav-links{display:flex;gap:32px;font-size:14.5px;font-weight:500;color:var(--mist);}
+.nav-links a:hover{color:var(--ink);}
+.nav-cta{display:flex;align-items:center;gap:14px;}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-body);font-weight:700;font-size:14.5px;padding:12px 22px;border-radius:999px;border:none;cursor:pointer;}
+.btn-primary{background:var(--brand);color:#fff;box-shadow:0 8px 20px rgba(91,79,232,0.28);}
+.btn-primary:hover{background:var(--brand-dark);}
+.btn-ghost{background:var(--paper);color:var(--ink);border:1.5px solid var(--line);}
+.btn-ghost:hover{border-color:var(--brand);color:var(--brand);}
+.nav-links-mobile{display:none;}
+@media (max-width:860px){.nav-links{display:none;}}
+
+/* ---------- HERO ---------- */
+.hero{max-width:1180px;margin:0 auto;padding:40px 28px 90px;display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;}
+@media (max-width:900px){.hero{grid-template-columns:1fr;padding-bottom:50px;}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--brand-tint);color:var(--brand-dark);font-weight:700;font-size:12.5px;letter-spacing:.03em;padding:7px 14px;border-radius:999px;margin-bottom:22px;}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--brand);animation:blink 1.6s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.35;}}
+h1{font-family:var(--font-display);font-size:50px;line-height:1.08;letter-spacing:-0.02em;margin:0 0 22px;font-weight:800;}
+h1 .grad{background:linear-gradient(100deg,var(--brand),#9C4DF5);-webkit-background-clip:text;background-clip:text;color:transparent;}
+@media (max-width:520px){h1{font-size:36px;}}
+.hero-sub{font-size:17px;line-height:1.6;color:var(--mist);max-width:460px;margin:0 0 32px;}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-lg{padding:15px 26px;font-size:15px;}
+
+/* ---------- HERO MOCKUP ---------- */
+.mock-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:0 30px 70px -25px rgba(30,20,80,0.25);overflow:hidden;}
+.mock-scene{position:relative;aspect-ratio:5/4;background:linear-gradient(160deg,#F4F2FE,#E9E6FB);overflow:hidden;}
+.mock-obj{position:absolute;}
+.obj-plant{left:8%;bottom:10%;width:26%;}
+.obj-laptop{left:36%;bottom:8%;width:40%;}
+.obj-bottle{right:9%;bottom:11%;width:14%;}
+.mbox{position:absolute;border:2.5px solid;border-radius:8px;}
+.mbox-label{position:absolute;top:-24px;left:0;font-family:var(--font-display);font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;color:#fff;white-space:nowrap;}
+.box-plant{border-color:var(--green);}
+.box-plant .mbox-label{background:var(--green);}
+.box-laptop{border-color:var(--blue);}
+.box-laptop .mbox-label{background:var(--blue);}
+.box-bottle{border-color:var(--rose);}
+.box-bottle .mbox-label{background:var(--rose);}
+.scan-line{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--brand),transparent);animation:scan 2.6s ease-in-out infinite;}
+@keyframes scan{0%{top:6%;}50%{top:92%;}100%{top:6%;}}
+.audio-chip{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:12.5px;font-weight:600;padding:9px 16px;border-radius:999px;display:flex;align-items:center;gap:7px;box-shadow:0 10px 24px rgba(0,0,0,0.25);}
+.mock-foot{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--mist);font-weight:500;}
+.mock-foot .live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;box-shadow:0 0 0 3px rgba(34,197,94,0.18);}
+
+/* ---------- FEATURES ---------- */
+.section{padding:80px 28px;max-width:1180px;margin:0 auto;}
+.section-head{text-align:center;max-width:560px;margin:0 auto 50px;}
+.section-head h2{font-family:var(--font-display);font-size:32px;font-weight:800;margin:0 0 10px;letter-spacing:-0.01em;}
+.section-head p{color:var(--mist);font-size:15.5px;margin:0;}
+.feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+@media (max-width:900px){.feature-grid{grid-template-columns:1fr 1fr;}}
+@media (max-width:520px){.feature-grid{grid-template-columns:1fr;}}
+.feature-card{background:var(--paper-tint);border:1px solid var(--line);border-radius:var(--radius-md);padding:26px 22px;}
+.feature-ic{width:42px;height:42px;border-radius:12px;background:var(--brand-tint);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:16px;}
+.feature-card h3{font-family:var(--font-display);font-size:16px;margin:0 0 8px;}
+.feature-card p{font-size:13.5px;color:var(--mist);line-height:1.55;margin:0;}
+
+/* ---------- HOW IT WORKS ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;counter-reset:step;}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr;}}
+@media (max-width:520px){.steps{grid-template-columns:1fr;}}
+.step{position:relative;padding-top:8px;}
+.step-num{font-family:var(--font-display);font-weight:800;font-size:13px;color:var(--brand);margin-bottom:10px;}
+.step h4{font-family:var(--font-display);font-size:15px;margin:0 0 6px;}
+.step p{font-size:13.5px;color:var(--mist);line-height:1.55;margin:0;}
+
+/* ---------- CTA ---------- */
+.cta{background:linear-gradient(120deg,var(--brand),#8B4DF0);border-radius:28px;padding:56px 40px;text-align:center;color:#fff;margin:20px 28px 90px;max-width:1124px;margin-left:auto;margin-right:auto;}
+.cta h2{font-family:var(--font-display);font-size:30px;margin:0 0 12px;font-weight:800;}
+.cta p{opacity:.9;margin:0 0 26px;font-size:15px;}
+.cta .btn-primary{background:#fff;color:var(--brand-dark);box-shadow:none;}
+.cta .btn-primary:hover{background:#F2F0FF;}
+
+footer{border-top:1px solid var(--line);padding:28px;text-align:center;color:var(--mist);font-size:13px;}
+</style>
 </head>
 <body>
 
-<!-- ============ ONBOARDING (first launch only) ============ -->
-<div class="onboard hidden" id="onboard">
-  <div class="onboard-slides" id="onboardSlides">
-    <div class="onboard-slide">
-      <div class="ob-icon">◎</div>
-      <h1>LensWord</h1>
-      <p class="ob-sub">Learn languages naturally</p>
-      <div class="ob-art">🔍</div>
-      <h2>Translate Your World</h2>
-      <p>Point your camera at objects around you, then anchor labels that translate to your chosen language.</p>
-    </div>
-    <div class="onboard-slide">
-      <div class="ob-icon">◎</div>
-      <h1>LensWord</h1>
-      <p class="ob-sub">Learn languages naturally</p>
-      <div class="ob-art">👆</div>
-      <h2>Interactive Learning</h2>
-      <p>Tap labels to see translations, hear native pronunciations, and save words as you go.</p>
-    </div>
-    <div class="onboard-slide">
-      <div class="ob-icon">◎</div>
-      <h1>LensWord</h1>
-      <p class="ob-sub">Learn languages naturally</p>
-      <div class="ob-art">▤</div>
-      <h2>Build Your Vocabulary</h2>
-      <p>All saved translations are organized in your personal collection, searchable and sortable.</p>
-    </div>
-    <div class="onboard-slide">
-      <div class="ob-icon">◎</div>
-      <h1>LensWord</h1>
-      <p class="ob-sub">Learn languages naturally</p>
-      <div class="ob-art">⚙</div>
-      <h2>Select Language</h2>
-      <p>Choose your target language any time from Settings — 12 languages built in.</p>
+<nav>
+  <div class="logo"><span class="logo-mark">👁️</span>VisionLingo</div>
+  <div class="nav-links">
+    <a href="#hero">Home</a>
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-primary" href="app.html">Get Started</a>
+  </div>
+</nav>
+
+<section class="hero" id="hero">
+  <div>
+    <div class="eyebrow"><span class="eyebrow-dot"></span>AI-POWERED OBJECT DETECTION</div>
+    <h1>See the World.<br>Hear the World.<br><span class="grad">Understand the World.</span></h1>
+    <p class="hero-sub">VisionLingo is an AI-powered assistant that detects objects around you in real time and speaks their names out loud in your chosen language — point your camera and start learning.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary btn-lg" href="app.html">▶ Start Camera</a>
+      <a class="btn btn-ghost btn-lg" href="#features">Learn More</a>
     </div>
   </div>
-  <div class="ob-dots" id="obDots"></div>
-  <button class="btn btn-amber ob-start" id="obStart">Start Learning</button>
-</div>
 
-<div class="app" id="app">
+  <div class="mock-card">
+    <div class="mock-scene">
+      <div class="scan-line"></div>
 
-  <!-- ============ TOP BAR ============ -->
-  <header class="topbar">
-    <div class="brand">
-      <span class="brand-mark">◎</span>
-      <span class="brand-name">LensWord</span>
-    </div>
-    <div class="topbar-right">
-      <button class="icon-pill" id="infoBtn" aria-label="How it works">ⓘ</button>
-      <button class="lang-pill" id="langPill" aria-haspopup="listbox">
-        <span id="langFlag">🇪🇸</span>
-        <span id="langLabel">Spanish</span>
-        <span class="chev">⌄</span>
-      </button>
-    </div>
-  </header>
+      <svg class="mock-obj obj-plant" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="118" rx="28" ry="9" fill="#C9BFAE"/>
+        <path d="M25 118 L32 70 L68 70 L75 118 Z" fill="#B8AC94"/>
+        <path d="M50 78 C20 70 15 25 45 15 C40 45 50 60 50 78Z" fill="#4C9A5B"/>
+        <path d="M50 78 C80 68 88 20 58 12 C60 45 50 60 50 78Z" fill="#5EB56D"/>
+        <path d="M50 78 C35 55 55 40 50 10 C65 40 55 55 50 78Z" fill="#3F8A4E"/>
+      </svg>
 
-  <!-- ============ SCAN VIEW ============ -->
-  <main class="view view-scan" id="view-scan" data-active="true">
+      <svg class="mock-obj obj-laptop" viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="10" width="160" height="95" rx="8" fill="#2B2B38"/>
+        <rect x="28" y="18" width="144" height="79" rx="3" fill="#5B7CE8"/>
+        <path d="M5 108 L195 108 L180 128 L20 128 Z" fill="#3D3D4D"/>
+      </svg>
 
-    <div class="camera-stage">
-      <video id="video" autoplay playsinline muted></video>
-      <canvas id="overlay"></canvas>
+      <svg class="mock-obj obj-bottle" viewBox="0 0 60 140" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="4" width="16" height="14" rx="3" fill="#2B2B38"/>
+        <path d="M18 18 L42 18 L46 40 L46 128 C46 134 40 138 30 138 C20 138 14 134 14 128 L14 40 Z" fill="#4A5A6E" opacity="0.9"/>
+        <rect x="14" y="55" width="32" height="30" fill="#5B4FE8" opacity="0.55"/>
+      </svg>
 
-      <!-- corner viewfinder -->
-      <div class="viewfinder">
-        <span class="vf-corner tl"></span>
-        <span class="vf-corner tr"></span>
-        <span class="vf-corner bl"></span>
-        <span class="vf-corner br"></span>
+      <div class="mbox box-plant" style="left:9%;bottom:12%;width:23%;height:66%;">
+        <span class="mbox-label">Plant</span>
+      </div>
+      <div class="mbox box-laptop" style="left:37%;bottom:9%;width:38%;height:44%;">
+        <span class="mbox-label">Laptop</span>
+      </div>
+      <div class="mbox box-bottle" style="right:10%;bottom:12%;width:12%;height:56%;">
+        <span class="mbox-label">Bottle</span>
       </div>
 
-      <div class="scan-status" id="scanStatus">
-        <span class="dot"></span>
-        <span id="scanStatusText">Loading detector…</span>
-      </div>
-
-      <button class="cam-flip" id="camFlip" title="Switch camera" aria-label="Switch camera">⟳</button>
-      <button class="label-settings-btn" id="labelSettingsBtn" title="Label settings" aria-label="Label settings">Aa</button>
-
-      <!-- persistent "anchored" labels (green pills) live here -->
-      <div class="anchors-layer" id="anchorsLayer"></div>
-
-      <!-- ephemeral auto-speak announcement pill -->
-      <div class="auto-pill-layer" id="autoPillLayer"></div>
-
-      <div class="camera-error hidden" id="cameraError">
-        <p class="ce-title">Camera unavailable</p>
-        <p class="ce-body" id="cameraErrorMsg">LensWord needs camera access to scan objects around you.</p>
-        <button class="btn btn-amber" id="retryCamera">Try again</button>
-      </div>
-
-      <div class="unlock-audio-banner hidden" id="unlockAudioBanner">🔊 Tap anywhere once to enable pronunciation</div>
+      <div class="audio-chip">🔊 Plant, Laptop, Bottle</div>
     </div>
-
-    <!-- floating "+" button appears over a selected box, to anchor its label -->
-    <button class="anchor-fab hidden" id="anchorFab" title="Anchor label here">＋</button>
-
-    <!-- word card slides up when an object is tapped -->
-    <section class="word-card hidden" id="wordCard">
-      <div class="wc-handle"></div>
-      <div class="wc-row">
-        <div class="wc-en" id="wcEnglish">object</div>
-        <button class="wc-close" id="wcClose" aria-label="Close">✕</button>
-      </div>
-      <div class="wc-translated" id="wcTranslated">
-        <span class="wc-word">…</span>
-      </div>
-      <div class="wc-phonetic" id="wcPhonetic"></div>
-      <div class="wc-actions">
-        <button class="wc-btn wc-speak" id="wcSpeak">
-          <span class="ic">▶</span> Hear it
-        </button>
-        <button class="wc-btn wc-save" id="wcSave">
-          <span class="ic">＋</span> Save word
-        </button>
-      </div>
-      <button class="wc-btn wc-anchor" id="wcAnchor">
-        <span class="ic">📌</span> Pin label on screen
-      </button>
-    </section>
-
-    <!-- caught-word toast: chip flies to tray -->
-    <div class="catch-toast hidden" id="catchToast">Saved to your tray</div>
-
-  </main>
-
-  <!-- ============ TRAY (flashcards) VIEW ============ -->
-  <main class="view view-tray" id="view-tray">
-    <div class="tray-header">
-      <div class="tray-header-row">
-        <div>
-          <h1>Your words</h1>
-          <p class="tray-sub" id="traySub">0 words captured</p>
-        </div>
-        <div class="tray-header-actions">
-          <button class="icon-pill" id="traySortBtn" title="Sort">↕</button>
-          <button class="icon-pill" id="trayFilterBtn" title="Filter by language">☰</button>
-        </div>
-      </div>
-      <input class="tray-search" id="traySearch" type="search" placeholder="Search saved words" />
-    </div>
-
-    <div class="tray-empty" id="trayEmpty">
-      <div class="te-icon">◎</div>
-      <p class="te-title">No words yet</p>
-      <p class="te-body">Scan something with your camera and tap it to save your first word.</p>
-    </div>
-
-    <div class="tray-grid" id="trayGrid"></div>
-  </main>
-
-  <!-- ============ SETTINGS VIEW ============ -->
-  <main class="view view-settings" id="view-settings">
-    <div class="tray-header">
-      <h1>Settings</h1>
-      <p class="tray-sub">Tune how LensWord works for you</p>
-    </div>
-
-    <div class="settings-block">
-      <label class="settings-label">Target language</label>
-      <div class="lang-grid" id="langGrid"></div>
-    </div>
-
-    <div class="settings-block">
-      <label class="settings-label">Auto-speak on sight</label>
-      <div class="segmented" id="autoSpeakSeg">
-        <button data-val="on" class="active">On</button>
-        <button data-val="off">Off</button>
-      </div>
-      <p class="settings-footnote" style="margin-top:10px; border-top:none; padding-top:0;">When on, LensWord automatically identifies and speaks aloud whatever's centered in view every few seconds — no tap needed. Tap objects any time for translations, saving, and pinning.</p>
-    </div>
-
-    <div class="settings-block">
-      <label class="settings-label">Detection sensitivity</label>
-      <div class="segmented" id="sensitivitySeg">
-        <button data-val="0.35">Loose</button>
-        <button data-val="0.5" class="active">Balanced</button>
-        <button data-val="0.65">Strict</button>
-      </div>
-    </div>
-
-    <div class="settings-block">
-      <label class="settings-label">Data</label>
-      <button class="btn btn-ghost btn-danger" id="clearWords">Clear all saved words</button>
-    </div>
-
-    <p class="settings-footnote">Runs fully on-device. No account, no server, no cost — detection uses TensorFlow.js, pronunciation uses your browser's speech engine, translation uses a free public API.</p>
-  </main>
-
-  <!-- ============ BOTTOM NAV ============ -->
-  <nav class="bottombar">
-    <button class="nav-btn active" data-view="scan">
-      <span class="nav-ic">◎</span><span>Scan</span>
-    </button>
-    <button class="nav-btn" data-view="tray">
-      <span class="nav-ic">▤</span><span>Words</span>
-      <span class="nav-badge hidden" id="navBadge">0</span>
-    </button>
-    <button class="nav-btn" data-view="settings">
-      <span class="nav-ic">⚙</span><span>Settings</span>
-    </button>
-  </nav>
-
-</div>
-
-<!-- Language picker sheet -->
-<div class="sheet-backdrop hidden" id="sheetBackdrop">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <h2>Choose target language</h2>
-    <div class="lang-grid" id="langGridSheet"></div>
+    <div class="mock-foot"><span><span class="live-dot"></span>Live detection</span><span>3 objects found</span></div>
   </div>
-</div>
+</section>
 
-<!-- Label settings sheet (size slider + clear all) -->
-<div class="sheet-backdrop hidden" id="labelSettingsBackdrop">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <h2>Label settings</h2>
-    <label class="settings-label">Label size</label>
-    <input type="range" min="0.8" max="1.6" step="0.1" value="1" id="labelSizeSlider" class="label-slider" />
-    <button class="btn btn-ghost btn-danger" id="clearAnchors" style="margin-top:18px;">Clear all pinned labels</button>
+<section class="section" id="features">
+  <div class="section-head">
+    <h2>Why Choose VisionLingo?</h2>
+    <p>Everything you need to learn vocabulary from the world in front of you, free and on-device.</p>
   </div>
-</div>
-
-<!-- Sort sheet for saved words -->
-<div class="sheet-backdrop hidden" id="sortBackdrop">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <h2>Sort by</h2>
-    <div class="segmented" id="sortBySeg">
-      <button data-val="date" class="active">Date Added</button>
-      <button data-val="en">Original</button>
-      <button data-val="translated">Translated</button>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-ic">🎯</div>
+      <h3>Real-time Detection</h3>
+      <p>Detect objects instantly using an on-device AI model with high accuracy, right in your browser.</p>
     </div>
-    <label class="settings-label" style="margin-top:18px;">Order</label>
-    <div class="segmented" id="sortOrderSeg">
-      <button data-val="asc">Ascending</button>
-      <button data-val="desc" class="active">Descending</button>
+    <div class="feature-card">
+      <div class="feature-ic">🔊</div>
+      <h3>Voice Output</h3>
+      <p>Hear the names of detected objects spoken aloud automatically, with clear native pronunciation.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-ic">🌐</div>
+      <h3>Multi-language Support</h3>
+      <p>Supports 13 languages, so you can learn vocabulary in whichever language you're studying.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-ic">📱</div>
+      <h3>User Friendly</h3>
+      <p>A simple, clean, responsive interface built for seamless use on desktop or mobile.</p>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Filter sheet for saved words -->
-<div class="sheet-backdrop hidden" id="filterBackdrop">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <h2>Filter by language</h2>
-    <div class="lang-grid" id="filterGrid"></div>
+<section class="section" id="how">
+  <div class="section-head">
+    <h2>How It Works</h2>
+    <p>From camera to vocabulary in four steps.</p>
   </div>
-</div>
-
-<!-- Instructions sheet -->
-<div class="sheet-backdrop hidden" id="infoBackdrop">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <h2>How to use LensWord</h2>
-    <div class="instr-list">
-      <div class="instr-item"><span class="instr-ic">🌐</span><div><b>Select a language</b><p>Open Settings and choose your target language.</p></div></div>
-      <div class="instr-item"><span class="instr-ic">📷</span><div><b>Point your camera</b><p>Boxes appear automatically around recognizable objects.</p></div></div>
-      <div class="instr-item"><span class="instr-ic">＋</span><div><b>Tap, then pin</b><p>Tap a box (or anywhere) to identify it, then tap "Pin label on screen" to anchor it.</p></div></div>
-      <div class="instr-item"><span class="instr-ic">🔊</span><div><b>Hear & save</b><p>Tap a pinned label to hear its pronunciation or save it to your collection.</p></div></div>
-      <div class="instr-item"><span class="instr-ic">✋</span><div><b>Remove a label</b><p>Long-press any pinned label, or the word card, to remove it.</p></div></div>
-    </div>
+  <div class="steps">
+    <div class="step"><div class="step-num">01</div><h4>Choose a language</h4><p>Pick the language you want to learn from Settings.</p></div>
+    <div class="step"><div class="step-num">02</div><h4>Point your camera</h4><p>Boxes appear automatically around objects it recognizes.</p></div>
+    <div class="step"><div class="step-num">03</div><h4>Tap to translate</h4><p>Tap any object to see its translation and hear it spoken.</p></div>
+    <div class="step"><div class="step-num">04</div><h4>Save & review</h4><p>Build a personal word collection you can revisit anytime.</p></div>
   </div>
+</section>
+
+<div class="cta">
+  <h2>Start learning with your camera today</h2>
+  <p>No installs, no accounts, no cost — just open it and start pointing.</p>
+  <a class="btn btn-primary btn-lg" href="app.html">▶ Start Camera</a>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
-<script src="languages.js"></script>
-<script src="app.js"></script>
+<footer>VisionLingo — runs entirely in your browser. No data leaves your device except translation lookups.</footer>
+
 </body>
 </html>

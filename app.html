@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>VisionLingo — See it. Say it. Learn it.</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔎</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ============ ONBOARDING (first launch only) ============ -->
+<div class="onboard hidden" id="onboard">
+  <div class="onboard-slides" id="onboardSlides">
+    <div class="onboard-slide">
+      <div class="ob-icon">◎</div>
+      <h1>VisionLingo</h1>
+      <p class="ob-sub">Learn languages naturally</p>
+      <div class="ob-art">🔍</div>
+      <h2>Translate Your World</h2>
+      <p>Point your camera at objects around you, then anchor labels that translate to your chosen language.</p>
+    </div>
+    <div class="onboard-slide">
+      <div class="ob-icon">◎</div>
+      <h1>VisionLingo</h1>
+      <p class="ob-sub">Learn languages naturally</p>
+      <div class="ob-art">👆</div>
+      <h2>Interactive Learning</h2>
+      <p>Tap labels to see translations, hear native pronunciations, and save words as you go.</p>
+    </div>
+    <div class="onboard-slide">
+      <div class="ob-icon">◎</div>
+      <h1>VisionLingo</h1>
+      <p class="ob-sub">Learn languages naturally</p>
+      <div class="ob-art">▤</div>
+      <h2>Build Your Vocabulary</h2>
+      <p>All saved translations are organized in your personal collection, searchable and sortable.</p>
+    </div>
+    <div class="onboard-slide">
+      <div class="ob-icon">◎</div>
+      <h1>VisionLingo</h1>
+      <p class="ob-sub">Learn languages naturally</p>
+      <div class="ob-art">⚙</div>
+      <h2>Select Language</h2>
+      <p>Choose your target language any time from Settings — 12 languages built in.</p>
+    </div>
+  </div>
+  <div class="ob-dots" id="obDots"></div>
+  <button class="btn btn-amber ob-start" id="obStart">Start Learning</button>
+</div>
+
+<div class="app" id="app">
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">◎</span>
+      <span class="brand-name">VisionLingo</span>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-pill" id="infoBtn" aria-label="How it works">ⓘ</button>
+      <button class="lang-pill" id="langPill" aria-haspopup="listbox">
+        <span id="langFlag">🇪🇸</span>
+        <span id="langLabel">Spanish</span>
+        <span class="chev">⌄</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ SCAN VIEW ============ -->
+  <main class="view view-scan" id="view-scan" data-active="true">
+
+    <div class="camera-stage">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="overlay"></canvas>
+
+      <!-- corner viewfinder -->
+      <div class="viewfinder">
+        <span class="vf-corner tl"></span>
+        <span class="vf-corner tr"></span>
+        <span class="vf-corner bl"></span>
+        <span class="vf-corner br"></span>
+      </div>
+
+      <div class="scan-status" id="scanStatus">
+        <span class="dot"></span>
+        <span id="scanStatusText">Loading detector…</span>
+      </div>
+
+      <button class="cam-flip" id="camFlip" title="Switch camera" aria-label="Switch camera">⟳</button>
+      <button class="label-settings-btn" id="labelSettingsBtn" title="Label settings" aria-label="Label settings">Aa</button>
+
+      <!-- persistent "anchored" labels (green pills) live here -->
+      <div class="anchors-layer" id="anchorsLayer"></div>
+
+      <!-- ephemeral auto-speak announcement pill -->
+      <div class="auto-pill-layer" id="autoPillLayer"></div>
+
+      <div class="camera-error hidden" id="cameraError">
+        <p class="ce-title">Camera unavailable</p>
+        <p class="ce-body" id="cameraErrorMsg">VisionLingo needs camera access to scan objects around you.</p>
+        <button class="btn btn-amber" id="retryCamera">Try again</button>
+      </div>
+
+      <div class="unlock-audio-banner hidden" id="unlockAudioBanner">🔊 Tap anywhere once to enable pronunciation</div>
+    </div>
+
+    <!-- floating "+" button appears over a selected box, to anchor its label -->
+    <button class="anchor-fab hidden" id="anchorFab" title="Anchor label here">＋</button>
+
+    <!-- word card slides up when an object is tapped -->
+    <section class="word-card hidden" id="wordCard">
+      <div class="wc-handle"></div>
+      <div class="wc-row">
+        <div class="wc-en" id="wcEnglish">object</div>
+        <button class="wc-close" id="wcClose" aria-label="Close">✕</button>
+      </div>
+      <div class="wc-translated" id="wcTranslated">
+        <span class="wc-word">…</span>
+      </div>
+      <div class="wc-phonetic" id="wcPhonetic"></div>
+      <div class="wc-actions">
+        <button class="wc-btn wc-speak" id="wcSpeak">
+          <span class="ic">▶</span> Hear it
+        </button>
+        <button class="wc-btn wc-save" id="wcSave">
+          <span class="ic">＋</span> Save word
+        </button>
+      </div>
+      <button class="wc-btn wc-anchor" id="wcAnchor">
+        <span class="ic">📌</span> Pin label on screen
+      </button>
+    </section>
+
+    <!-- caught-word toast: chip flies to tray -->
+    <div class="catch-toast hidden" id="catchToast">Saved to your tray</div>
+
+  </main>
+
+  <!-- ============ TRAY (flashcards) VIEW ============ -->
+  <main class="view view-tray" id="view-tray">
+    <div class="tray-header">
+      <div class="tray-header-row">
+        <div>
+          <h1>Your words</h1>
+          <p class="tray-sub" id="traySub">0 words captured</p>
+        </div>
+        <div class="tray-header-actions">
+          <button class="icon-pill" id="traySortBtn" title="Sort">↕</button>
+          <button class="icon-pill" id="trayFilterBtn" title="Filter by language">☰</button>
+        </div>
+      </div>
+      <input class="tray-search" id="traySearch" type="search" placeholder="Search saved words" />
+    </div>
+
+    <div class="tray-empty" id="trayEmpty">
+      <div class="te-icon">◎</div>
+      <p class="te-title">No words yet</p>
+      <p class="te-body">Scan something with your camera and tap it to save your first word.</p>
+    </div>
+
+    <div class="tray-grid" id="trayGrid"></div>
+  </main>
+
+  <!-- ============ SETTINGS VIEW ============ -->
+  <main class="view view-settings" id="view-settings">
+    <div class="tray-header">
+      <h1>Settings</h1>
+      <p class="tray-sub">Tune how VisionLingo works for you</p>
+    </div>
+
+    <div class="settings-block">
+      <label class="settings-label">Target language</label>
+      <div class="lang-grid" id="langGrid"></div>
+    </div>
+
+    <div class="settings-block">
+      <label class="settings-label">Auto-speak on sight</label>
+      <div class="segmented" id="autoSpeakSeg">
+        <button data-val="on" class="active">On</button>
+        <button data-val="off">Off</button>
+      </div>
+      <p class="settings-footnote" style="margin-top:10px; border-top:none; padding-top:0;">When on, VisionLingo automatically identifies and speaks aloud whatever's centered in view every few seconds — no tap needed. Tap objects any time for translations, saving, and pinning.</p>
+    </div>
+
+    <div class="settings-block">
+      <label class="settings-label">Detection sensitivity</label>
+      <div class="segmented" id="sensitivitySeg">
+        <button data-val="0.35">Loose</button>
+        <button data-val="0.6" class="active">Balanced</button>
+        <button data-val="0.65">Strict</button>
+      </div>
+    </div>
+
+    <div class="settings-block">
+      <label class="settings-label">Data</label>
+      <button class="btn btn-ghost btn-danger" id="clearWords">Clear all saved words</button>
+    </div>
+
+    <p class="settings-footnote">Runs fully on-device. No account, no server, no cost — detection uses TensorFlow.js, pronunciation uses your browser's speech engine, translation uses a free public API.</p>
+  </main>
+
+  <!-- ============ BOTTOM NAV ============ -->
+  <nav class="bottombar">
+    <button class="nav-btn active" data-view="scan">
+      <span class="nav-ic">◎</span><span>Scan</span>
+    </button>
+    <button class="nav-btn" data-view="tray">
+      <span class="nav-ic">▤</span><span>Words</span>
+      <span class="nav-badge hidden" id="navBadge">0</span>
+    </button>
+    <button class="nav-btn" data-view="settings">
+      <span class="nav-ic">⚙</span><span>Settings</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- Language picker sheet -->
+<div class="sheet-backdrop hidden" id="sheetBackdrop">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h2>Choose target language</h2>
+    <div class="lang-grid" id="langGridSheet"></div>
+  </div>
+</div>
+
+<!-- Label settings sheet (size slider + clear all) -->
+<div class="sheet-backdrop hidden" id="labelSettingsBackdrop">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h2>Label settings</h2>
+    <label class="settings-label">Label size</label>
+    <input type="range" min="0.8" max="1.6" step="0.1" value="1" id="labelSizeSlider" class="label-slider" />
+    <button class="btn btn-ghost btn-danger" id="clearAnchors" style="margin-top:18px;">Clear all pinned labels</button>
+  </div>
+</div>
+
+<!-- Sort sheet for saved words -->
+<div class="sheet-backdrop hidden" id="sortBackdrop">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h2>Sort by</h2>
+    <div class="segmented" id="sortBySeg">
+      <button data-val="date" class="active">Date Added</button>
+      <button data-val="en">Original</button>
+      <button data-val="translated">Translated</button>
+    </div>
+    <label class="settings-label" style="margin-top:18px;">Order</label>
+    <div class="segmented" id="sortOrderSeg">
+      <button data-val="asc">Ascending</button>
+      <button data-val="desc" class="active">Descending</button>
+    </div>
+  </div>
+</div>
+
+<!-- Filter sheet for saved words -->
+<div class="sheet-backdrop hidden" id="filterBackdrop">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h2>Filter by language</h2>
+    <div class="lang-grid" id="filterGrid"></div>
+  </div>
+</div>
+
+<!-- Instructions sheet -->
+<div class="sheet-backdrop hidden" id="infoBackdrop">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h2>How to use VisionLingo</h2>
+    <div class="instr-list">
+      <div class="instr-item"><span class="instr-ic">🌐</span><div><b>Select a language</b><p>Open Settings and choose your target language.</p></div></div>
+      <div class="instr-item"><span class="instr-ic">📷</span><div><b>Point your camera</b><p>Boxes appear automatically around recognizable objects.</p></div></div>
+      <div class="instr-item"><span class="instr-ic">＋</span><div><b>Tap, then pin</b><p>Tap a box (or anywhere) to identify it, then tap "Pin label on screen" to anchor it.</p></div></div>
+      <div class="instr-item"><span class="instr-ic">🔊</span><div><b>Hear & save</b><p>Tap a pinned label to hear its pronunciation or save it to your collection.</p></div></div>
+      <div class="instr-item"><span class="instr-ic">✋</span><div><b>Remove a label</b><p>Long-press any pinned label, or the word card, to remove it.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
+<script src="languages.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

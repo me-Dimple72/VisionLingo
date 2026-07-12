@@ -1,4 +1,4 @@
-// Target languages LensWord can translate & pronounce words in.
+// Target languages VisionLingo can translate & pronounce words in.
 // `translate` = code used by the MyMemory translation API (en|xx)
 // `speech`    = BCP-47 locale used by the browser SpeechSynthesis API
 const LANGUAGES = [
