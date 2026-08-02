@@ -136,12 +136,6 @@ point your camera at an object and tap it.
 ---
 
 
-## Credits
-
-- Detection & classification models: the **TensorFlow.js Models** team at Google
-- Translation: [MyMemory Translated](https://mymemory.translated.net/)
-- Fonts: Sora, Inter, JetBrains Mono via Google Fonts
-
 ## License
 
 Provided as-is for personal and educational use. TensorFlow.js models are
