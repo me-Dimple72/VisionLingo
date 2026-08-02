@@ -53,8 +53,6 @@ demos, while keeping the live camera feed fast and responsive.
 | Frontend | **HTML5, CSS3, JavaScript (ES2020+)** |
 | Fonts | Sora, Inter, JetBrains Mono (Google Fonts) |
 
-No `package.json`, no bundler, no `npm install`. Every dependency loads
-from a public CDN — clone it and open it, and it runs.
 
 ## How It Works
 
