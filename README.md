@@ -135,17 +135,6 @@ Open `http://localhost:8080` for the landing page, or
 camera access when prompted, wait for the model to finish loading, then
 point your camera at an object and tap it.
 
-## Deployment
-
-Any static host works — there is no backend to provision.
-
-- **Vercel:** import the repo → Framework preset **Other** → Deploy
-- **GitHub Pages:** Settings → Pages → Deploy from branch → `main` / `root`
-- **Netlify:** drag the project folder into `app.netlify.com/drop`
-
-All three provide the `https://` URL required for camera access on a
-real device.
-
 ---
 
 ## Privacy
