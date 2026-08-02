@@ -117,6 +117,3 @@ point your camera at an object and tap it.
 
 ## License
 
-Provided as-is for personal and educational use. TensorFlow.js models are
-distributed by Google under the Apache 2.0 License; the MyMemory API is
-free for reasonable personal/non-commercial use per its own terms.
