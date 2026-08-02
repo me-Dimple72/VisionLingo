@@ -54,7 +54,7 @@ demos, while keeping the live camera feed fast and responsive.
 | Text-to-speech | **Web Speech API** (`speechSynthesis`) |
 | Camera | **MediaDevices / getUserMedia** |
 | Persistence | **localStorage** (saved words, settings, translation cache) |
-| Frontend | Vanilla **HTML5, CSS3, JavaScript (ES2020+)** — no framework, no build step |
+| Frontend | **HTML5, CSS3, JavaScript (ES2020+)** |
 | Fonts | Sora, Inter, JetBrains Mono (Google Fonts) |
 
 No `package.json`, no bundler, no `npm install`. Every dependency loads
