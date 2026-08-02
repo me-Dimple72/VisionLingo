@@ -13,7 +13,8 @@
 
 ## Overview
 
-VisionLingo turns any camera — into a live language tutor. Point it at an everyday object and the app detects it, names it,
+VisionLingo turns any camera — into a live language tutor. 
+Point it at an everyday object and the app detects it, names it,
 translates it into different languages, and speaks it aloud — all in
 real time.
 
