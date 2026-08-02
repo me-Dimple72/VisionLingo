@@ -51,8 +51,6 @@ demos, while keeping the live camera feed fast and responsive.
 | Camera | **MediaDevices / getUserMedia** |
 | Persistence | **localStorage** (saved words, settings, translation cache) |
 | Frontend | **HTML5, CSS3, JavaScript (ES2020+)** |
-| Fonts | Sora, Inter, JetBrains Mono (Google Fonts) |
-
 
 ## How It Works
 
