@@ -19,7 +19,7 @@ translates it into different languages, and speaks it aloud — all in
 real time, entirely inside the browser.
 
 Under the hood, it runs two pre-trained deep learning models client-side
-via **TensorFlow.js**: a real-time object detector for live bounding-box
+via **TensorFlow.js** : a real-time object detector for live bounding-box
 tracking, and a 1,000-class image classifier for precise, on-demand
 identification. This two-stage design gives VisionLingo a substantially
 broader working vocabulary than typical single-model browser detection
