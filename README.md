@@ -6,7 +6,7 @@
 
 **An AI-powered, real-time object recognition and multilingual language-learning application that runs entirely in the browser **
 
-[Live Demo](#/https://visionlingo.vercel.app/) · [Features](#key-features) · [Tech Stack](#tech-stack)
+[Live Demo](https://visionlingo.vercel.app/) · [Features](#key-features) · [Tech Stack](#tech-stack)
 
 </div>
 
