@@ -56,8 +56,6 @@ demos, while keeping the live camera feed fast and responsive.
 No `package.json`, no bundler, no `npm install`. Every dependency loads
 from a public CDN — clone it and open it, and it runs.
 
----
-
 ## How It Works
 
 ```
