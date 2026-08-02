@@ -46,7 +46,6 @@ broader working vocabulary, while keeping the live camera feed fast and responsi
 | Translation | **MyMemory Translation API** |
 | Text-to-speech | **Web Speech API** (`speechSynthesis`) |
 | Camera | **MediaDevices / getUserMedia** |
-| Persistence | **localStorage** (saved words, settings, translation cache) |
 | Frontend | **HTML5, CSS3, JavaScript** |
 
 ## How It Works
