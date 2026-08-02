@@ -104,7 +104,7 @@ Camera access requires a secure context (`https://` or `localhost`).
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/visionlingo.git
+git clone https://github.com/your-username/visionlingo.git 
 cd visionlingo
 
 # Serve it locally — any static server works
