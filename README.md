@@ -135,14 +135,6 @@ point your camera at an object and tap it.
 
 ---
 
-## Privacy
-
-All detection and classification run on-device — no image or video data
-is ever uploaded. The only network calls after the initial page load are
-loading the model weights once from the CDN, and sending the identified
-English word (never any image) to the translation API. Saved words and
-settings live only in the browser's local storage.
-
 
 ## Credits
 
