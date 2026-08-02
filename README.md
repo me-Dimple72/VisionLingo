@@ -38,8 +38,8 @@ via **TensorFlow.js**. This two-stage design provides a broader working vocabula
 
 | Layer | Technology |
 |---|---|
-| Object detection | **COCO-SSD** (TensorFlow.js) — pre-trained SSD + MobileNetV2 backbone|
-| Object classification | **MobileNetV2** (TensorFlow.js) — pre-trained on ImageNet|
+| Object detection | **COCO-SSD** (TensorFlow.js) — Real-time object detection (pre-trained SSD)|
+| Object classification | **MobileNetV2** (TensorFlow.js) — Image classification(pre-trained on ImageNet)|
 | ML runtime | **TensorFlow.js**  |
 | Translation | **MyMemory Translation API** |
 | Text-to-speech | **Web Speech API** (`speechSynthesis`) |
