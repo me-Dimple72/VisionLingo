@@ -18,9 +18,9 @@ translates it into different languages, and speaks it aloud — all in
 real time, entirely inside the browser.
 
 Under the hood, it runs two pre-trained deep learning models client-side
-via **TensorFlow.js** : for precise, on-demand
-identification. This two-stage design gives VisionLingo a substantially
-broader working vocabulary, while keeping the live camera feed fast and responsive.
+via **TensorFlow.js**. This two-stage design gives VisionLingo a substantially
+broader working vocabulary, for precise, on-demand
+identification while keeping the live camera feed fast and responsive.
 
 
 ## Key Features
