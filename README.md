@@ -49,7 +49,7 @@ demos, while keeping the live camera feed fast and responsive.
 |---|---|
 | Object detection | **COCO-SSD** (TensorFlow.js) — pre-trained SSD + MobileNetV2 backbone, 80 classes |
 | Object classification | **MobileNetV2** (TensorFlow.js) — pre-trained on ImageNet, 1,000 classes |
-| ML runtime | **TensorFlow.js** — WebGL-accelerated in-browser inference, automatic CPU fallback |
+| ML runtime | **TensorFlow.js**  |
 | Translation | **MyMemory Translation API** |
 | Text-to-speech | **Web Speech API** (`speechSynthesis`) |
 | Camera | **MediaDevices / getUserMedia** |
