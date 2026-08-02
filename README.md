@@ -26,7 +26,7 @@ broader working vocabulary than typical single-model browser detection
 demos, while keeping the live camera feed fast and responsive.
 
 
----
+--
 
 ## Key Features
 
