@@ -88,7 +88,6 @@ An **Auto-speak** mode also runs MobileNetV2 periodically on the most
 prominent tracked object, translating and pronouncing it automatically —
 no tap required.
 
----
 
 ## Project Structure
 
@@ -125,8 +124,6 @@ Open `http://localhost:8080` for the landing page, or
 `http://localhost:8080/app.html` to go straight to the scanner. Allow
 camera access when prompted, wait for the model to finish loading, then
 point your camera at an object and tap it.
-
----
 
 
 ## License
