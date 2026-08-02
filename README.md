@@ -25,8 +25,6 @@ broader working vocabulary than typical single-model browser detection
 demos, while keeping the live camera feed fast and responsive.
 
 
---
-
 ## Key Features
 
 - 🎥 **Real-time object detection** with live bounding boxes, back or front camera
@@ -110,7 +108,6 @@ visionlingo/
 └── camera-test.html      Standalone camera/permissions diagnostic
 ```
 
----
 
 ## Getting Started
 
