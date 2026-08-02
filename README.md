@@ -102,7 +102,7 @@ Camera access requires a secure context (`https://` or `localhost`).
 ```bash
 # Clone the repo
 git clone https://github.com/me-Dimple72/VisionLingo.git
-cd visionlingo
+cd VisionLingo
 
 # Serve it locally — any static server works
 python3 -m http.server 8080
