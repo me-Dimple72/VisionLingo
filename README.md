@@ -81,7 +81,6 @@ An **Auto-speak** mode also runs MobileNetV2 periodically on the most
 prominent tracked object, translating and pronouncing it automatically —
 no tap required.
 
-
 ## Project Structure
 
 ```
