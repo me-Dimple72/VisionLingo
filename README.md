@@ -18,11 +18,9 @@ translates it into different languages, and speaks it aloud — all in
 real time, entirely inside the browser.
 
 Under the hood, it runs two pre-trained deep learning models client-side
-via **TensorFlow.js** : a real-time object detector for live bounding-box
-tracking, and a 1,000-class image classifier for precise, on-demand
+via **TensorFlow.js** : for precise, on-demand
 identification. This two-stage design gives VisionLingo a substantially
-broader working vocabulary than typical single-model browser detection
-demos, while keeping the live camera feed fast and responsive.
+broader working vocabulary, while keeping the live camera feed fast and responsive.
 
 
 ## Key Features
@@ -35,7 +33,6 @@ demos, while keeping the live camera feed fast and responsive.
 - 💾 **Personal vocabulary collection** — save, search, filter by language, and sort saved words
 - 🎴 **Flip-card review mode** for saved vocabulary
 - 🎓 **Guided onboarding** and an always-available instructions panel
-- 🛡️ **Resilient by design** — graceful handling of camera permission issues, blocked CDNs, and GPU/WebGL failures, each with a clear on-screen explanation rather than a silent dead end
 
 ---
 
