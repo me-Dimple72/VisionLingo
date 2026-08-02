@@ -4,7 +4,7 @@
 
 ### See it. Say it. Learn it.
 
-**A real-time, in-browser object recognition and language-learning app — powered by computer vision.An AI-powered, real-time object recognition and multilingual language-learning application that runs entirely in the browser **
+**An AI-powered, real-time object recognition and multilingual language-learning application that runs entirely in the browser **
 
 [Live Demo](#) · [Report a Bug](#) · [Features](#key-features) · [Tech Stack](#tech-stack)
 
