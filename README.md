@@ -26,8 +26,6 @@ identification. This two-stage design gives VisionLingo a substantially
 broader working vocabulary than typical single-model browser detection
 demos, while keeping the live camera feed fast and responsive.
 
-There is no backend server, no database, no API keys to configure, and
-no cost to run — including the machine learning itself.
 
 ---
 
