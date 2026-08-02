@@ -13,16 +13,13 @@
 
 ## Overview
 
-VisionLingo turns any camera — into a live language tutor. 
+VisionLingo turns any camera into a live language tutor. 
 Point it at an everyday object and the app detects it, names it,
 translates it into different languages, and speaks it aloud — all in
 real time.
 
-Under the hood, it runs two pre-trained deep learning models client-side
-via **TensorFlow.js**. This two-stage design gives VisionLingo a substantially
-broader working vocabulary, for precise, on-demand
-identification while keeping the live camera feed fast and responsive.
-
+Under the hood, VisionLingo runs two pre-trained deep learning models client-side
+via **TensorFlow.js**. This two-stage design provides a broader working vocabulary for precise, on-demand object identification while keeping the live camera feed fast and responsive.
 
 ## Key Features
 
