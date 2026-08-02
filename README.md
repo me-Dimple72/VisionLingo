@@ -40,8 +40,8 @@ identification while keeping the live camera feed fast and responsive.
 
 | Layer | Technology |
 |---|---|
-| Object detection | **COCO-SSD** (TensorFlow.js) — pre-trained SSD + MobileNetV2 backbone, 80 classes |
-| Object classification | **MobileNetV2** (TensorFlow.js) — pre-trained on ImageNet, 1,000 classes |
+| Object detection | **COCO-SSD** (TensorFlow.js) — pre-trained SSD + MobileNetV2 backbone|
+| Object classification | **MobileNetV2** (TensorFlow.js) — pre-trained on ImageNet|
 | ML runtime | **TensorFlow.js**  |
 | Translation | **MyMemory Translation API** |
 | Text-to-speech | **Web Speech API** (`speechSynthesis`) |
