@@ -156,12 +156,6 @@ loading the model weights once from the CDN, and sending the identified
 English word (never any image) to the translation API. Saved words and
 settings live only in the browser's local storage.
 
-## Roadmap
-
-- Larger/alternate classifier options for higher accuracy
-- WebXR-based persistent world anchoring on supported devices
-- Optional self-hosted translation backend for higher-volume use
-- IndexedDB migration for larger saved-word collections
 
 ## Credits
 
