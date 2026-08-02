@@ -4,7 +4,7 @@
 
 ### See it. Say it. Learn it.
 
-**An AI-powered, real-time object recognition and multilingual language-learning application that runs entirely in the browser **
+**An AI-powered, real-time object recognition and multilingual language-learning application that runs entirely in the browser**
 
 [Live Demo](https://visionlingo.vercel.app/) ·  [Tech Stack](#tech-stack)
 
@@ -50,7 +50,7 @@ demos, while keeping the live camera feed fast and responsive.
 | Text-to-speech | **Web Speech API** (`speechSynthesis`) |
 | Camera | **MediaDevices / getUserMedia** |
 | Persistence | **localStorage** (saved words, settings, translation cache) |
-| Frontend | **HTML5, CSS3, JavaScript (ES2020+)** |
+| Frontend | **HTML5, CSS3, JavaScript** |
 
 ## How It Works
 
