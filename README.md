@@ -16,7 +16,7 @@
 
 VisionLingo turns any camera — phone or laptop — into a live language
 tutor. Point it at an everyday object and the app detects it, names it,
-translates it into one of 13 languages, and speaks it aloud — all in
+translates it into different languages, and speaks it aloud — all in
 real time, entirely inside the browser.
 
 Under the hood, it runs two pre-trained deep learning models client-side
