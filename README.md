@@ -116,4 +116,4 @@ point your camera at an object and tap it.
 
 
 ## License
-
+VisionLingo is under the **MIT License**
